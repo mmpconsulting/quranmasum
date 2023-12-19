@@ -1,0 +1,3 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_bp_hr_contract_allowance_user,bp_hr_employee_contract_allowance.bp.hr.contract.allowance,model_bp_hr_contract_allowance,base.group_user,1,1,1,1
+access_bp_hr_contract_allowance_rel_user,bp_hr_employee_contract_allowance.bp.hr.contract.allowance.rel,model_bp_hr_contract_allowance_rel,base.group_user,1,1,1,1

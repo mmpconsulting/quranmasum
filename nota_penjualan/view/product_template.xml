@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="qty_per_pack_product_template_only_form_view">
+            <field name="name">qty.per.pack.product.template.only.form.view</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_form_view"/>
+            <field name="priority">20</field>
+            <field name="arch" type="xml">
+                <xpath expr="//div[@name='volume']" position="after">
+                    <field name="qty_per_pack"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

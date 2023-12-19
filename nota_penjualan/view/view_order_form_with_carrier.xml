@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="manual_deliery_sale_order_form">
+            <field name="name">manual.delivery.sale.order.form.view.with_carrier</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="delivery.view_order_form_with_carrier"/>
+            <field name="priority">20</field>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='delivery_price']" position="before">
+                    <field name="is_manual_input" invisible="1" />
+                </xpath>
+
+                <xpath expr="//button[@name='set_delivery_line']" position="replace">
+                    <button name="set_delivery_line" type="object" class="oe_inline oe_link" attrs="{'invisible':['|','|','|',('carrier_id','=',False),('state','not in',('draft','sent')),('delivery_rating_success','=',False),('is_manual_input','=',True)]}">
+                        <i class="fa fa-arrow-right"/>
+ Add to order</button>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

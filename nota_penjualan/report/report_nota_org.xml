@@ -1,0 +1,286 @@
+<odoo>
+    <data>
+        <!-- <record id="paperformat_nota_penjualannya" model="report.paperformat">
+            <field name="name">Report Nota Paper Format</field>
+            <field name="format">A4</field>
+            <field name="orientation">Landscape</field>
+            <field name="default" eval="False" />
+            <field name="dpi" eval="90" />
+            <field name="margin_top" eval="10" />
+            <field name="margin_right" eval="5" />
+            <field name="margin_bottom" eval="5" />
+            <field name="margin_left" eval="5" />
+            <field name="header_line" eval="False" />
+            <field name="header_spacing" eval="25" />
+        </record> -->
+
+        <!-- <report 
+            id="report_nota_id" 
+            string="Form Nota Pembelian" 
+            model="account.invoice" 
+            report_type="qweb-pdf" 
+            file="nota_penjualan.nota_id" 
+            name="nota_penjualan.nota_id" 
+            print_report_name="'%s' % object.number" 
+            ref="nota_penjualan.paperformat_nota_penjualannya" /> -->
+
+
+        <!-- <record id="report_nota_penjualan" model="ir.actions.report">
+            <field name="name">Form Nota Pembelian</field>
+            <field name="model">account.invoice</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">nota_penjualan.nota_id</field>
+            <field name="report_file">nota_penjualan.nota_id</field>
+            <field name="print_report_name">'%s' % object.number</field>
+            <field name="paperformat_id" ref="nota_penjualan.paperformat_nota_penjualannya" />
+        </record> -->
+
+        <record model="report.paperformat" id="nota_penjualan_report_format">
+            <field name="name">Nota Pembelian Format</field>
+            <field name="default" eval="False"/>
+            <field name="format">A4</field>
+            <field name="orientation">Landscape</field>
+            <field name="margin_top">5</field>
+            <field name="margin_right">5</field>
+            <field name="margin_bottom">5</field>
+            <field name="margin_left">5</field>
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">0</field>
+            <field name="dpi">96</field>
+        </record>
+
+        <report 
+            string="Nota Pembelian Report" 
+            id="nota_penjualan_report_action" 
+            model="account.invoice" 
+            report_type="qweb-pdf"
+            attachment_use="False"
+            paperformat="nota_penjualan.nota_penjualan_report_format"
+            name="nota_penjualan.nota_id" 
+            file="nota_penjualan.nota_id"
+            print_report_name="'%s' % object.number"
+        />
+
+        <template id="nota_id">
+            <t t-call="web.basic_layout">
+                <t t-foreach="docs" t-as="doc">
+                    <t t-call="nota_penjualan.bootstrap_3_style">
+                        <div class="page">
+                            <style>
+                                .table-borderless > tbody > tr > td,
+                                .table-borderless > tbody > tr > th,
+                                .table-borderless > tfoot > tr > td,
+                                .table-borderless > tfoot > tr > th,
+                                .table-borderless > thead > tr > td,
+                                .table-borderless > thead > tr > th {
+                                    border: none;
+                                }
+                            </style>
+
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <t t-call="nota_penjualan.nota_penjualan_content"/>
+                                </div>
+                                <div class="col-sm-4">
+                                    <t t-call="nota_penjualan.nota_penjualan_content"/>                                    
+                                </div>
+                                <div class="col-sm-4"></div>
+                            </div>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+
+        <template id="nota_penjualan_content" name="template_name">
+            <table class="table table-borderless table-condensed ">
+                <tbody>
+                    <tr>
+                        <td>
+                            PENERBIT
+                        </td>
+                        <td colspan="3">
+                            Kepada Yth :
+                        </td>
+                    </tr>
+                    <tr>
+                        <td rowspan="8">
+                            <img t-if="doc.company_id.logo" t-att-src="image_data_uri(doc.company_id.logo)" style="text-align:center;max-height:120px;width:110;" alt="Company Logo" />
+                        </td>
+                        <td rowspan="4" colspan="5">
+                            <span t-field="doc.partner_id.name" />
+                            <br />
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <table class="table table-borderless table-condensed ">
+                <tbody>
+                    <tr>
+                        <td class="col-md-6">
+                            <t t-esc="doc.company_id.website" />
+                            <br />
+                            Email :
+                            <t t-esc="doc.company_id.email" />
+                        </td>
+                        <td class="col-md-6"></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <strong>
+                                <span t-field="doc.name" />
+                            </strong>
+                        </td>
+                        <td style="border:thin solid black;">
+                            Tgl Kirim :
+                            <span t-field="doc.date_invoice" />
+                            <br />
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Bismillahirrahmaanirrahiim.
+                        </td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Bersama ini mohon dikirimkan Mushaf Al-Qur'an MA'SUM sebagai berikut :
+                        </td>
+                        <td style="border:thin solid black;">
+                            No Faktur :
+                            <br />
+                            <center>
+                                <span t-if="doc.number" t-field="doc.number" />
+                            </center>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <table class="table table-bordered table-condensed ">
+                <thead>
+                    <tr>
+                        <th class="" >
+                            <center>Kode</center>
+                        </th>
+                        <th class="" >
+                            <center>No</center>
+                        </th>
+                        <th class="" >
+                            <center>Nama Barang</center>
+                        </th>
+                        <th class="" >
+                            <center>Coly</center>
+                        </th>
+                        <th class="" >
+                            <center>Jml eks</center>
+                        </th>
+                        <th class="" >
+                            <center>Harga</center>
+                        </th>
+                        <th class="" >
+                            <center>Total</center>
+                        </th>
+                    </tr>
+                </thead>
+
+                <t t-set="index" t-value="0" />
+                <t t-set="index_max" t-value="10" />
+                <t t-set="index_kosong" t-value="0" />
+
+                <tbody>
+                    <t t-foreach="doc.invoice_line_ids" t-as="l">
+                        <t t-if="index &lt; index_max">
+                            <tr>
+                                <td>
+                                    <span t-field="l.lot_id.name" />
+                                </td>
+                                <td>
+                                    <center>
+                                        <t t-esc="l_index +1" />
+                                    </center>
+                                </td>
+                                <td>
+                                    <span t-field="l.product_id.name" />
+                                </td>
+                                <td class="text-right">
+                                    <span t-field="l.coly" />
+                                </td>
+                                <td class="text-right">
+                                    <center>
+                                        <span t-esc="'{0:,.0f}'.format(int(l.quantity))" />
+                                    </center>
+                                </td>
+                                <td class="text-right">
+                                    <span t-esc="'{0:,.2f}'.format(l.price_unit)" />
+                                </td>
+                                <td class="text-right">
+                                    <span t-esc="'{0:,.2f}'.format(l.price_subtotal)" />
+                                </td>
+                            </tr>
+                            <t t-set="index" t-value="index +1"></t>
+                        </t>
+
+                        <t t-set="index_kosong" t-value="index_max-index" />
+                    </t>
+                    <t t-if="index_kosong &lt; index_max">
+                        <t t-foreach="range(index_kosong)" t-as="item">
+                            <tr>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        </t>
+                    </t>
+                    <tr>
+                        <td colspan="3">
+                            <!-- <center>Bagian Pemasaran | Bagian Gudang</center> -->
+                        </td>
+                        <td colspan="2">
+                            <!-- <center>Yang Menerima</center>
+                            <br />
+                            <center>Tanda tangan dan nama</center> -->
+                        </td>
+                        <td>
+                            <center>
+                                <b>Jumlah</b>
+                            </center>
+                        </td>
+                        <td class="text-right">
+                            <b t-field="doc.amount_total" />
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td rowspan="3" colspan="3"></td>
+                        <td colspan="2"></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td rowspan="2" colspan="2"></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td></td>
+                    </tr>
+
+                </tbody>
+            </table>
+        </template>
+
+
+        <!-- <record id="report_nota_id" model="ir.actions.report">
+            <field name="paperformat_id" ref="nota_penjualan.paperformat_nota_penjualannya" />
+        </record> -->
+
+    </data>
+</odoo>

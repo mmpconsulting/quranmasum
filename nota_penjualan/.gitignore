@@ -1,0 +1,83 @@
+# This file is used to ignore files which are generated
+# ----------------------------------------------------------------------------
+
+*~
+*.autosave
+*.a
+*.core
+*.moc
+*.o
+*.obj
+*.orig
+*.rej
+*.so
+*.so.*
+*_pch.h.cpp
+*_resource.rc
+*.qm
+.#*
+*.*#
+core
+!core/
+tags
+.DS_Store
+.directory
+*.debug
+Makefile*
+*.prl
+*.app
+moc_*.cpp
+ui_*.h
+qrc_*.cpp
+Thumbs.db
+*.res
+*.rc
+/.qmake.cache
+/.qmake.stash
+
+# qtcreator generated files
+*.pro.user*
+
+# xemacs temporary files
+*.flc
+
+# Vim temporary files
+.*.swp
+/opt/odoo/master/12.0/odoo-bin
+*.ib_pdb_index
+*.idb
+*.ilk
+*.pdb
+*.sln
+*.suo
+*.vcproj
+*vcproj.*.*.user
+*.ncb
+*.sdf
+*.opensdf
+*.vcxproj
+*vcxproj.*
+
+# MinGW generated files
+*.Debug
+*.Release
+
+# Python byte code/opt/odoo/master/12.0/odoo-bin
+*.cpython-38.pyc
+*.pyc
+*/*.pyc
+
+
+# Binaries
+# --------
+*.dll
+*.exe
+
+.project
+.pydevproject
+.settings
+.vscode
+
+
+bp_tradmed_signup/models/__pycache__/res_partner.cpython-38.pyc
+bp_tradmed_signup/controllers/__pycache__/controllers.cpython-38.pyc

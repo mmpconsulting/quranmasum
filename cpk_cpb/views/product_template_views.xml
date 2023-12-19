@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="cpk_cpb_inherit_product_template_form_view" model="ir.ui.view">
+        <field name="name">cpk.cpb.inherit.product.template.form.view</field>
+        <field name="model">product.template</field>
+        <field name="priority" eval="8" />
+        <field name="inherit_id" ref="product.product_template_form_view"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='type']" position="before">
+                <field name="mo_type"/>
+            </xpath>
+            <xpath expr="//page[@name='general_information']" position="after">
+                <page name="procedures" string="Prosedur">
+                    <group string="Pencampuran" attrs="{'invisible': [('mo_type', '!=', 'olah')]}">
+                        <field name="pencampuran_ids" nolabel="1" context="{'pencampuran_ids': pencampuran_ids}">
+                            <tree editable="bottom">
+                                <field name="product_tmpl_id" invisible="1"/>
+                                <field name="sequence" readonly="1" force_save="1" style="width:2%%;text-align:left;"/>
+                                <field name="step" required="1"/>
+                            </tree>
+                        </field>
+                    </group>
+                    <group string="Filling Kapsul" attrs="{'invisible': [('mo_type', '!=', 'olah')]}">
+                        <field name="filling_kapsul_ids" nolabel="1" context="{'filling_kapsul_ids': filling_kapsul_ids}">
+                            <tree string="Filling Kapsul" editable="bottom">
+                                <field name="product_tmpl_id" invisible="1"/>
+                                <field name="sequence" readonly="1" force_save="1" style="width:2%%;text-align:left;"/>
+                                <field name="step" required="1"/>
+                            </tree>
+                        </field>
+                    </group>
+                    <group string="Filling Primer" attrs="{'invisible': [('mo_type', '!=', 'olah')]}">
+                        <field name="filling_primer_ids" nolabel="1" context="{'filling_primer_ids': filling_primer_ids}">
+                            <tree string="Filling Primer" editable="bottom">
+                                <field name="product_tmpl_id" invisible="1"/>
+                                <field name="sequence" readonly="1" force_save="1" style="width:2%%;text-align:left;"/>
+                                <field name="step" required="1"/>
+                            </tree>
+                        </field>
+                    </group>
+                    <group string="Pengemasan" attrs="{'invisible': [('mo_type', '!=', 'kemas')]}">
+                        <field name="pengemasan_ids" nolabel="1" context="{'pengemasan_ids': pengemasan_ids}">
+                            <tree string="Pengemasan" editable="bottom">
+                                <field name="product_tmpl_id" invisible="1"/>
+                                <field name="sequence" readonly="1" force_save="1" style="width:2%%;text-align:left;"/>
+                                <field name="step" required="1"/>
+                            </tree>
+                        </field>
+                    </group>
+                    <group string="Pengawasan" attrs="{'invisible': [('mo_type', '!=', 'kemas')]}">
+                        <field name="pengawasan_ids" nolabel="1" context="{'pengawasan_ids': pengawasan_ids}">
+                            <tree string="Pengawasan" editable="bottom">
+                                <field name="product_tmpl_id" invisible="1"/>
+                                <field name="sequence" readonly="1" force_save="1" style="width:2%%;text-align:left;"/>
+                                <field name="step" required="1"/>
+                            </tree>
+                        </field>
+                    </group>
+                </page>
+            </xpath>
+        </field>
+    </record>
+</odoo>

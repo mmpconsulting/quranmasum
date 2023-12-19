@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+	<data>
+		<!-- List View -->
+		<record model="ir.ui.view" id="bp_hr_contract_allowance_tree">
+			<field name="name">bp.hr.contract.allowance.tree</field>
+			<field name="model">bp.hr.contract.allowance</field>
+			<field name="arch" type="xml">
+				<tree>
+					<field name="name"/>
+					<field name="code"/>
+				</tree>
+			</field>
+		</record>
+
+		<!-- Form View -->
+		<record model="ir.ui.view" id="bp_hr_contract_allowance_form">
+			<field name="name">bp.hr.contract.allowance.form</field>
+			<field name="model">bp.hr.contract.allowance</field>
+			<field name="arch" type="xml">
+				<form>
+					<header>
+					</header>
+					<sheet>
+						<group>
+							<group>
+								<field name="name"/>
+							</group>
+							<group>
+								<field name="code"/>
+							</group>
+						</group>
+					</sheet>
+				</form>
+			</field>
+		</record>
+
+		<record model="ir.actions.act_window" id="bp_hr_contract_allowance_action">
+			<field name="name">Contract Allowances</field>
+			<field name="res_model">bp.hr.contract.allowance</field>
+			<field name="view_type">form</field>
+			<field name="view_mode">tree,form</field>
+		</record>
+
+		<menuitem id="submenu_bp_hr_contract_allowance" name="Contract Allowances" parent="hr.menu_human_resources_configuration" action="bp_hr_contract_allowance_action" sequence="99" />
+
+	</data>
+</odoo>

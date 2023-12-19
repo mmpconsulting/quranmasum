@@ -1,0 +1,30 @@
+<odoo>
+    <data>
+
+        <record id="account_invoice_form" model="ir.ui.view">
+            <field name="name">Account Invoice Form</field>
+            <field name="model">account.invoice</field>
+            <field name="inherit_id" ref="account.invoice_form"/>
+            <field name="priority" eval="8"/>
+            <field name="arch" type="xml">
+                <field name="partner_id" position="before">
+                    <field name="company_id" readonly="1"/>
+                </field>
+                <!-- <field name="payment_term_id" position="after">
+                    <field name="coly"/>
+                </field> -->
+                <xpath expr="//field[@name='invoice_line_ids']/tree/field[@name='product_id']" position="after">
+                    <field name="lot_id"/>
+                </xpath>
+                <xpath expr="//field[@name='invoice_line_ids']/tree/field[@name='quantity']" position="before">
+                    <field name="total_coly"/>
+                </xpath>
+
+                <xpath expr="//button[@name='preview_invoice']" position="after">
+                    <button name="recompute_coly" type="object" string="Recompute Coly"/>
+                </xpath>
+            </field>
+        </record>
+
+    </data>
+</odoo>

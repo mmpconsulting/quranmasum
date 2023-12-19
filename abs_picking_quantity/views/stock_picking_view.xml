@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="view_Delivery_orders_total_product_form" model="ir.ui.view">
+        <field name="name">stock.picking.form</field>
+        <field name="model">stock.picking</field>
+        <field name="inherit_id" ref="stock.view_picking_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//notebook" position="after">
+                <group groups='abs_picking_quantity.group_show_product_and_quantity_on_delivery_order'>
+                    <field name="total_product_of_delivery_orders"></field>
+                    <field name="total_quantity_of_delivery_orders"></field>
+                    <field name="total_quantity_of_delivery_orders_done"></field>
+                </group>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

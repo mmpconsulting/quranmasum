@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Manufacturing Order -->
+        <record id="cpk_cpb_inherit_mrp_production_form_view" model="ir.ui.view">
+            <field name="name">cpk.cpb.inherit.mrp.production.form.view</field>
+            <field name="model">mrp.production</field>
+            <field name="inherit_id" ref="mrp.mrp_production_form_view"/>
+            <field name="arch" type="xml">
+                <button name="action_toggle_is_locked" position="after">
+
+                    <button string="Laporan Pengolahan Bets" type="action" class="oe_highlight"
+                            name="%(cpk_cpb.action_custom_report_pengolahan)d"
+                            attrs="{'invisible': ['|',('mo_type', '!=', 'olah'),('state', 'not in', ('evaluasi_olah','done'))]}"/>
+                    <button string="Laporan Pengemasan" type="action" class="oe_highlight"
+                            name="%(cpk_cpb.action_custom_report_pengemasan)d"
+                            attrs="{'invisible': ['|',('mo_type', '!=', 'kemas'),('state', 'not in', ('evaluasi_kemas','done'))]}"/>
+
+                    <button name="do_start_process" string="Mulai Proses" class="btn-success" type="object" states="confirmed"/>
+                    <button name="change_state" string="Move State" invisible="0" class="btn-warning" type="object"/>
+                    <!-- <button name="do_penimbangan" string="Penimbangan" class="btn-success" type="object" states="penimbangan"/>
+                    <button name="do_pencampuran" string="Pencampuran" class="btn-success" type="object" states="pencampuran"/> 
+                    <button name="do_filling_kapsul" string="Filling Kapsul" class="btn-success" type="object" states="filling_kapsul"/>-->
+                    
+                    <field name="mo_type" invisible="1"/>
+
+                    <!-- pengolahan -->
+                    <button name="do_penimbangan" states="penimbangan" string="Penimbangan" class="btn-success" type="object" attrs="{'invisible': ['|', ('state', '!=', 'penimbangan'), ('mo_type', '!=', 'olah')]}"/>
+                    <button name="do_pencampuran" states="pencampuran" string="Pencampuran" class="btn-success" type="object" attrs="{'invisible': ['|', ('state', '!=', 'pencampuran'), ('mo_type', '!=', 'olah')]}"/>
+                    <button name="do_filling_kapsul" states="filling_kapsul" string="Filling Kapsul" class="btn-success" type="object" attrs="{'invisible': ['|', ('state', '!=', 'filling_kapsul'), ('mo_type', '!=', 'olah')]}"/>
+                    <button name="do_filling_primer" states="filling_primer" string="Filling Primer" class="btn-success" type="object" attrs="{'invisible': ['|', ('state', '!=', 'filling_primer'), ('mo_type', '!=', 'olah')]}"/>
+                    
+                    <!-- pengemasan -->
+                    <button name="do_prosedur" states="prosedur" string="Pengemasan" class="btn-success" type="object" attrs="{'invisible': ['|', ('state', '!=', 'prosedur'), ('mo_type', '!=', 'kemas')]}"/>
+                    <button name="do_pengawasan" states="pengawasan" string="Pengawasan" class="btn-success" type="object" attrs="{'invisible': ['|', ('state', '!=', 'pengawasan'), ('mo_type', '!=', 'kemas')]}"/>
+                    <button name="do_rekonsiliasi" states="rekonsiliasi" string="Rekonsiliasi" class="btn-success" type="object" attrs="{'invisible': ['|', ('state', '!=', 'rekonsiliasi'), ('mo_type', '!=', 'kemas')]}"/>
+                    
+                    <!-- evaluasi -->
+                    <button name="do_evaluasi_pengolahan" string="Evaluasi Pengolahan" class="btn-success" type="object" attrs="{'invisible': ['|', ('state', 'not in', ('done','evaluasi_olah')), ('mo_type', '!=', 'olah')]}"/>
+                    <button name="do_evaluasi_pengemasan" string="Evaluasi Pengemasan" class="btn-success" type="object" attrs="{'invisible': ['|', ('state', 'not in', ('done','evaluasi_kemas')), ('mo_type', '!=', 'kemas')]}"/>
+                </button>
+                <xpath expr="//field[@name='bom_id']" position="after">
+                        <field name="ka_produksi" string="Ka. Produksi" required="1" options="{'no_open': True, 'no_create_edit': True, 'no_create': True}"/>
+                        <field name="date_mo" string="Tanggal" required="1"/>
+                    </xpath>
+                    <xpath expr="//field[@name='origin']" position="after">
+                        <field name="date_mulai" string="Mulai" required="1"/>
+                        <field name="date_selesai" string="Selesai" required="1"/>
+                </xpath>
+                <xpath expr="//notebook/page[2]" position="after">
+
+                    <!-- Alat dan Ruang -->
+                    <page name="alat_dan_ruang" string="Alat dan Ruang">
+                        <group col="4">
+                            <field name="protap_penyimpangan_id" options="{'no_create_edit': True, 'no_create': True}" required="1"/>
+                        </group>
+                        <group string="# Alat">
+                            <field name="alat_ids" nolabel="1" context="{'alat_ids': alat_ids}">
+                                <tree editable="bottom">
+                                    <field name="production_id" invisible="1"/>
+                                    <field name="sequence" readonly="1" force_save="1" style="width:2%%;text-align:left;"/>
+                                    <field name="alat_id" string="Alat" domain="[('category', '=', 'alat')]" required="1" options="{'no_open': True, 'no_create_edit': True, 'no_create': True}"/>
+                                    <field name="protap_id" required="1" string="Nomor Protap" domain="[('alat_ruang_id', '=', alat_id)]" options="{'no_open': True, 'no_create_edit': True, 'no_create': True}"/>
+                                </tree>
+                            </field>
+                        </group>
+                        <group string="# Ruang">
+                            <field name="ruang_ids" nolabel="1" context="{'ruang_ids': ruang_ids}">
+                                <tree editable="bottom">
+                                    <field name="production_id" invisible="1"/>
+                                    <field name="sequence" readonly="1" force_save="1" style="width:2%%;text-align:left;"/>
+                                    <field name="ruang_id" required="1" string="Ruang" domain="[('category', '=', 'ruang')]" options="{'no_open': True, 'no_create_edit': True, 'no_create': True}"/>
+                                    <field name="protap_id" required="1" string="Nomor Protap" domain="[('alat_ruang_id', '=', ruang_id)]" options="{'no_open': True, 'no_create_edit': True, 'no_create': True}"/>
+                                </tree>
+                            </field>
+                        </group>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- Manufacturing Order Custom Tree-->
+        <!-- Manufacturing Order -->
+        <record id="mrp_production_smart_button_tree_view" model="ir.ui.view">
+            <field name="name">cpk.cpb.inherit.mrp.production.tree</field>
+            <field name="model">mrp.production</field>
+            <field name="inherit_id" ref="mrp.mrp_production_tree_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='availability']" position="after">
+                    <field name="alat_ids" widget="many2many_tags"/>
+                    <field name="ruang_ids" widget="many2many_tags"/>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- Manufacturing Order Custom Action -->
+        <record id="mrp_production_smart_button_action" model="ir.actions.act_window">
+            <field name="name">Manufacturing Orders</field>
+            <field name="res_model">mrp.production</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="view_id" ref="mrp_production_smart_button_tree_view"/>
+            <field name="help" type="html">
+              <p class="o_view_nocontent_empty_folder">
+                There's no manufacturing order yet
+              </p>
+            </field>
+        </record>
+    </data>
+</odoo>

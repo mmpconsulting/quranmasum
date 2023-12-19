@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright AHA Tech -->
+<odoo>
+    <data noupdate="1">
+        <record id="ir_config_parameter_categ_bahan_awal" model="ir.config_parameter">
+            <field name="name">ir.config_parameter.categ.bahan.awal</field>
+            <field name="model">ir.config_parameter</field>
+            <field name="key">cpk_cpb.default_categ_bahan_awal</field>
+            <field name="value">[]</field>
+        </record>
+
+        <record id="ir_config_parameter_categ_bahan_pengemas" model="ir.config_parameter">
+            <field name="name">ir.config_parameter.categ.bahan.pengemas</field>
+            <field name="model">ir.config_parameter</field>
+            <field name="key">cpk_cpb.default_categ_bahan_pengemas</field>
+            <field name="value">[]</field>
+        </record>
+
+        <record id="ir_config_parameter_categ_bahan_kemas_sekunder" model="ir.config_parameter">
+            <field name="name">ir.config_parameter.categ.bahan.kemas.sekunder</field>
+            <field name="model">ir.config_parameter</field>
+            <field name="key">cpk_cpb.default_categ_bahan_kemas_sekunder</field>
+            <field name="value">[]</field>
+        </record>
+    </data>
+</odoo>

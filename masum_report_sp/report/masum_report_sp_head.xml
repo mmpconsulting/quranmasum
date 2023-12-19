@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data noupdate="0">
+    <record id="paperformat_masum" model="report.paperformat">
+        <field name="name">BENS A4</field>
+        <field name="default" eval="True" />
+        <field name="format">A4</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">10</field>
+        <field name="margin_bottom">10</field>
+        <field name="margin_left">10</field>
+        <field name="margin_right">10</field>
+        <field name="header_line" eval="False" />
+        <field name="header_spacing">0</field>
+        <field name="dpi">90</field>
+    </record>
+    <record id="report_masum_report_sp" model="ir.actions.report">
+        <field name="name">Surat Jalan</field>
+        <field name="model">stock.picking</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">masum_report_sp.masum_report_sp_report</field>
+        <field name="report_file">masum_report_sp.masum_report_sp_head</field>
+        <field name="print_report_name">'Delivery Slip - %s - %s' % (object.partner_id.name or '', object.name)</field>
+        <field name="binding_model_id" ref="stock.model_stock_picking"/>
+        <field name="paperformat_id" ref="masum_report_sp.paperformat_masum"/>
+    </record>
+        <!--
+        <report
+            id="report_masum_report_so"
+            string="Sale Order masum"
+            report_type="qweb-pdf"
+            model="stock.picking"
+            file="masum_report_so.masum_report_so_head"
+            name="masum_report_so.masum_report_so_report"
+        />
+        -->
+        <template id="masum_report_sp_report">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="o">
+                    <t t-call="masum_report_sp.report_masum_report_sp_doc" t-lang="o.partner_id.lang"/>
+                </t>
+            </t>
+        </template>
+    </data>
+</odoo>

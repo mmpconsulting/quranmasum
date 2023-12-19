@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="report_total_product_quantity_picking_slip" inherit_id="stock.report_picking">
+        <xpath expr="//p[@t-field='o.note']" position="before">
+            <p t-if="o.total_product_of_delivery_orders">
+                <strong groups="abs_picking_quantity.group_show_product_and_quantity_on_delivery_order">Total Products:</strong>
+                <span t-field="o.total_product_of_delivery_orders" groups="abs_picking_quantity.group_show_product_and_quantity_on_delivery_order"/>
+            </p>
+            <p t-if="o.total_quantity_of_delivery_orders">
+                <strong groups="abs_picking_quantity.group_show_product_and_quantity_on_delivery_order">Reserved Quantity:</strong>
+                <span t-field="o.total_quantity_of_delivery_orders" groups="abs_picking_quantity.group_show_product_and_quantity_on_delivery_order"/>
+            </p>
+            <p t-if="o.total_quantity_of_delivery_orders_done">
+                <strong groups="abs_picking_quantity.group_show_product_and_quantity_on_delivery_order">Done Quantity:</strong>
+                <span t-field="o.total_quantity_of_delivery_orders_done" groups="abs_picking_quantity.group_show_product_and_quantity_on_delivery_order"/>
+            </p>
+        </xpath>
+    </template>
+
+</odoo>

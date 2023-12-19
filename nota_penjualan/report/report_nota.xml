@@ -1,0 +1,292 @@
+<odoo>
+    <data>
+        <!-- <record model="report.paperformat" id="nota_penjualan_report_format">
+            <field name="name">Nota Invoice A4</field>
+            <field name="format">A4</field>
+            <field name="page_height">0</field>
+            <field name="page_width">0</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">5</field>
+            <field name="margin_bottom">5</field>
+            <field name="margin_left">5</field>
+            <field name="margin_right">5</field>
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">0</field>
+            <field name="dpi">90</field>
+        </record> -->
+
+        <record model="report.paperformat" id="nota_invoice_continous">
+            <field name="name">Nota Invoice Continous</field>
+            <field name="format">custom</field>
+            <field name="page_height">140</field>
+            <field name="page_width">240</field>
+            <field name="orientation">Portrait</field>
+            <field name="margin_top">5</field>
+            <field name="margin_bottom">5</field>
+            <field name="margin_left">5</field>
+            <field name="margin_right">5</field>
+            <field name="header_line" eval="False"/>
+            <field name="header_spacing">0</field>
+            <field name="dpi">90</field>
+        </record>
+
+        <!-- <report string="Nota A4" id="nota_penjualan_report_action" model="account.invoice" report_type="qweb-pdf" attachment_use="0" paperformat="nota_penjualan.nota_penjualan_report_format" name="nota_penjualan.nota_id" print_report_name="'Nota_Penjualan_%s' % object.number" /> -->
+
+        <report string="Nota Continous" id="nota_penjualan_report_continous_action" model="account.invoice" report_type="qweb-pdf" attachment_use="0" paperformat="nota_penjualan.nota_invoice_continous" name="nota_penjualan.nota_id" print_report_name="'%s' % object.number" />
+
+        <template id="nota_id">
+            <t t-call="web.basic_layout">
+                <t t-foreach="docs" t-as="doc">
+                    <t t-call="nota_penjualan.bootstrap_3_style">
+                        <div class="page">
+                            <style>                    
+                                body {
+                                    font-family: arial;
+                                    font-size:1.3em;
+                                }
+
+                                .table-borderless > tbody > tr > td,
+                                .table-borderless > tbody > tr > th,
+                                .table-borderless > tfoot > tr > td,
+                                .table-borderless > tfoot > tr > th,
+                                .table-borderless > thead > tr > td,
+                                .table-borderless > thead > tr > th {
+                                    border: none;
+                                }
+                                .table-bordered > tbody > tr > td,
+                                .table-bordered > tbody > tr > th,
+                                .table-bordered > tfoot > tr > td,
+                                .table-bordered > tfoot > tr > th,
+                                .table-bordered > thead > tr > td,
+                                .table-bordered > thead > tr > th {
+                                    border-color:black !important;
+                                }
+
+                                .table-bordered > tbody > tr.table-header > td{
+                                    border:2px solid black;
+                                }
+
+                                .table-bordered > thead > tr > th {
+                                    vertical-align:middle;
+                                    border-top:2px solid black;
+                                }
+                                .tgl-box{
+                                    border:thin solid black !important;
+                                }
+                                .company_name{
+                                    font-size:1.5em;
+                                }
+                                .report_title{
+                                    font-size:1.7em;
+                                }
+                            </style>
+
+                            <t t-set="splitted_lines" t-value="doc.get_splitted_lines()" />
+
+                            <t t-set="row_idx" t-value="1" />
+                            <t t-set="page_idx" t-value="1" />
+                            <t t-set="max_page_idx" t-value="len(splitted_lines)" />
+                            <!-- <t t-set="ongkir" t-value="0" /> -->
+                            <t t-set="ongkir" t-value="doc.get_ongkir()" />
+
+                            <t t-foreach="range(max_page_idx)" t-as="idx">
+
+                                <t t-set="line" t-value="splitted_lines[idx]" />
+
+                                <t t-if="page_idx == 1">
+                                    <table class="table table-borderless table-sm ">
+
+                                        <tbody>
+                                            <tr style="border-bottom:2px solid black; ">
+                                                <td class="col-xs-5">
+                                                    <strong class="company_name">Maksum Media Berkah</strong>
+                                                    <br/>
+                                                    <span >Tgl Kirim : </span>
+                                                    <span t-field="doc.date_invoice" />
+                                                </td>
+
+                                                <td>
+                                                    <strong class="report_title">NOTA PENJUALAN</strong>
+                                                    <br/>
+                                                    <span >No Faktur : </span>
+                                                    <span t-field="doc.number" />
+                                                </td>
+
+                                                <td class="text-right">
+                                                    <strong>Kepada Yth,</strong>                                                    
+                                                    <p style="margin-top:0;margin-bottom:0;" t-if="doc.partner_id.name" t-field="doc.partner_id.name" />                                                    
+                                                    <p style="margin-top:0;margin-bottom:0;" t-if="doc.partner_id.street != ''" t-field="doc.partner_id.street" />                                                    
+                                                    <p style="margin-top:0;margin-bottom:0;" t-if="doc.partner_id.city != ''" t-field="doc.partner_id.city" />
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </t>
+
+                                <span t-if="page_idx == 1">
+                                    <strong style="font-style: italic;">Bismillahirrahmaanirrahiim.</strong>
+                                    <br/>
+                                    <span>Bersama ini mohon dikirimkan Mushaf Al Qur'an MA'SUM sebagai berikut :</span>
+                                </span>
+
+                                <t t-if="page_idx > 1">
+                                    <br/>
+                                    <br/>
+                                </t>
+
+                                <table class="table table-bordered table-condensed " style="margin-top:0;">
+                                    <t t-set="index" t-value="0" />
+                                    <t t-set="index_max" t-value="10" />
+                                    <t t-set="index_kosong" t-value="0" />
+                                    <tbody>
+                                        <tr t-if="page_idx == 1" class="table-header">
+                                            <th style="border-color:black !important;">
+                                                <center>No</center>
+                                            </th>
+                                            <th >
+                                                <center>MP</center>
+                                            </th>
+                                            <th >
+                                                <center>Kode</center>
+                                            </th>
+                                            <th >
+                                                <center>Nama Barang</center>
+                                            </th>
+                                            <th >
+                                                <center>Coly</center>
+                                            </th>
+                                            <th >
+                                                <center>Jml eks</center>
+                                            </th>
+                                            <th >
+                                                <center>Harga</center>
+                                            </th>
+                                            <th >
+                                                <center>Total</center>
+                                            </th>
+                                        </tr>
+
+
+
+
+                                        <t t-foreach="line" t-as="l">
+                                            <!-- <t t-if="l.product_id.is_delivery_product()">
+                                                <t t-set="ongkir" t-value="ongkir + l.price_subtotal" />
+                                            </t> -->
+                                            <!-- <t t-else="l.product_id.is_delivery_product()"> -->
+                                            <tr  >
+                                                <td>
+                                                    <center>
+                                                        <t t-esc="row_idx" />
+                                                    </center>
+                                                </td>
+                                                <td>
+                                                    <span t-field="l.lot_id.name" />
+                                                </td>
+                                                <td>
+                                                    <span t-field="l.product_id.default_code" />
+                                                </td>
+                                                <td>
+                                                    <span t-field="l.product_id.name" />
+                                                </td>
+                                                <td class="text-right">
+                                                    <span t-field="l.total_coly" />
+                                                </td>
+
+                                                <td class="text-right">
+                                                    <center>
+                                                        <span t-esc="'{0:,.0f}'.format(int(l.quantity))" />
+                                                    </center>
+                                                </td>
+
+                                                <td class="text-right">
+                                                    <span t-esc="'{0:,.0f}'.format(l.price_unit)" />
+                                                </td>
+
+                                                <td class="text-right">
+                                                    <span t-esc="'{0:,.0f}'.format(l.price_subtotal)" />
+                                                </td>
+
+                                            </tr>
+                                            <t t-set="index" t-value="index +1"></t>
+                                            <t t-set="index_kosong" t-value="index_max-index" />
+                                            <t t-set="row_idx" t-value="row_idx + 1" />
+                                            <!-- </t> -->
+                                        </t>
+
+                                        <!-- <t t-foreach="range(request.env.user.company_id.line_per_page - len(line))" t-as="only_row">
+                                            <tr >
+                                                <td style="height:15px;" ></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td></td>
+                                            </tr>
+                                        </t> -->
+
+                                        <t t-if="page_idx == max_page_idx">
+                                            <tr >
+                                                <td rowspan="3" colspan="2" style="vertical-align : bottom;text-align:center;">
+                                                    <center>
+                                                        <span style="border-top:thin solid black;">Bagian Pemasaran</span>
+                                                    </center>
+                                                </td>
+
+                                                <td rowspan="3" colspan="1" style="vertical-align : bottom;text-align:center;">
+                                                    <center>
+                                                        <span style="border-top:thin solid black;">Bagian Gudang</span>
+                                                    </center>
+                                                </td>
+
+                                                <td rowspan="3" colspan="1" style="vertical-align : bottom;text-align:center;">
+                                                    <center>
+                                                        <span >Yang Menerima</span>
+                                                    </center>
+                                                    <center>
+                                                        <span style="border-top:thin solid black;">Tanda tangan dan nama</span>
+                                                    </center>
+                                                </td>
+
+                                                <td rowspan="3" colspan="2" style="vertical-align : bottom;">
+                                                    <span t-raw="request.env.user.company_id.footer_note" class="mt-0 mb-0" />
+                                                </td>
+                                                <td colspan="1" class="text-right">Jumlah</td>
+                                                <td colspan="1" class="text-right">
+                                                    <span t-esc="'{0:,.0f}'.format(doc.amount_total - ongkir)" />
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="1" class="text-right">Ekspedisi</td>
+                                                <td colspan="1" class="text-right">
+                                                    <span t-esc="'{0:,.0f}'.format(ongkir)" />
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="1" class="text-right">Total</td>
+                                                <td colspan="1" class="text-right">
+                                                    <span t-esc="'{0:,.0f}'.format(doc.amount_total)" />
+                                                </td>
+                                            </tr>
+                                        </t>
+
+                                    </tbody>
+                                </table>
+
+                                <t t-set="page_idx" t-value="page_idx + 1" />
+
+                                <p style="page-break-after:always;"></p>
+
+
+                            </t>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </template>
+
+
+    </data>
+</odoo>

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_mrp_production_rekonsiliasi_pengemasan_wizard" model="ir.ui.view">
+        <field name="name">MRP Production Rekonsiliasi Pengemasan</field>
+        <field name="model">mrp.production.rekonsiliasi.pengemasan</field>
+        <field name="arch" type="xml">
+            <form string="Rekonsiliasi Pengemasan">
+                <group col="4">
+                    <field name="pelaksana" required="1" options="{'no_open': True, 'no_create_edit': True, 'no_create': True}"/>
+                    <field name="pemeriksa" required="1" options="{'no_open': True, 'no_create_edit': True, 'no_create': True}"/>
+                    <field name="production_id" invisible="1"/>
+                </group>
+                <group string="# Rekonsiliasi bahan kemas">
+                    <field name="rekonsiliasi_bahan_kemas_ids" nolabel="1" context="{'active_id': production_id}">
+                        <tree editable="bottom" delete="0" create="0">
+                            <field name="rekonsiliasi_id" invisible="1"/>
+                            <field name="product_id" required="1" readonly="1" force_save="1"/>
+                            <field name="jumlah_teoritis_per_bets" readonly="1" force_save="1"/>
+                            <field name="jumlah_teoritis_per_order" readonly="1" force_save="1" invisible="1"/>
+                            <field name="diterima"/>
+                            <field name="dipakai"/>
+                            <field name="rusak"/>
+                            <field name="dikembalikan"/>
+                            <field name="dihancurkan" invisible="1"/>
+                            <field name="product_uom" readonly="1" force_save="1" groups="uom.group_uom" invisible="1"/>
+                            <field name="move_id" invisible="1"/>
+                        </tree>
+                    </field>
+                </group>
+                <group string="# Rekonsiliasi produk jadi"/>
+                <group>
+                    <field name="jumlah_botol"/>
+                </group>
+                <group>
+                    <field name="box_penuh_ids" nolabel="1" context="{'active_id': production_id}">
+                        <tree editable="bottom" delete="1" create="1">
+                            <field name="rekonsiliasi_id" invisible="1"/>
+                            <field name="date" required="1"/>
+                            <field name="quantity" required="1" sum="Total"/>
+                        </tree>
+                    </field>
+                </group>
+                <group>
+                    <field name="box_tidak_penuh"/>
+                </group>
+                <group string="">
+                    <field name="total_hasil_pengemasan" string="(a) Total hasil pengemasan"/>
+                    <field name="total_hasil_produk_jadi" string="(b) Total hasil produk jadi"/>
+                    <label for="persentase_hasil" string="Persentase hasil"/>
+                    <div>
+                        <field name="persentase_hasil" class="oe_inline" readonly="1"/>
+                        <strong>&#032;%</strong>
+                    </div>
+                    <label for="batas_hasil_min" string="Batas hasil"/>
+                    <div>
+                        <field name="batas_hasil_min" class="oe_inline" readonly="1"/>
+                        <strong>&#032;-&#032;</strong>
+                        <field name="batas_hasil_max" class="oe_inline" readonly="1"/>
+                        <strong>&#032;( % )</strong>
+                    </div>
+                    <label for="status" string="Status" style="font-weight: 1000; color: purple"/>
+                    <div>
+                        <field name="status" nolabel="1" class="oe_inline" attrs="{'invisible': [('status', '=', 'ok')]}" style="font-weight: 1000; color: white; background-color: #ff9800;" readonly="1" force_save="1"/>
+                        <field name="status" nolabel="1" class="oe_inline" attrs="{'invisible': [('status', '=', 'not_ok')]}" style="font-weight: 1000; color: white; background-color: #04AA6D;" readonly="1" force_save="1"/>
+                    </div>
+                </group>
+                <footer>
+                    <button name="write" type="object" string="Save" class="btn-primary"/>
+                    <button name="confirm" type="object" string="Confirm" class="btn-success"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="act_mrp_production_rekonsiliasi_pengemasan" model="ir.actions.act_window">
+        <field name="name">Rekonsiliasi Pengemasan</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">mrp.production.rekonsiliasi.pengemasan</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">form</field>
+        <field name="context">{}</field>
+        <field name="target">new</field>
+    </record>
+</odoo>

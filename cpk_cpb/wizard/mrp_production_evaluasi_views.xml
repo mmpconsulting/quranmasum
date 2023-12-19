@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_mrp_production_evaluasi_wizard" model="ir.ui.view">
+        <field name="name">MRP Production Evaluasi</field>
+        <field name="model">mrp.production.evaluasi</field>
+        <field name="arch" type="xml">
+            <form string="Evaluasi">
+                <group string="# Kepala Bagian Produksi">
+                        <field name="production_id" invisible="1"/>
+                        <field name="ka_produksi" string="Name" required="1" options="{'no_open': True, 'no_create_edit': True, 'no_create': True}"/>
+                        <field name="date_hasil_produksi" required="1" string="Tanggal"/>
+                </group>
+                <group string="# Kepala Bagian Pemastian Mutu">
+                        <field name="production_id" invisible="1"/>
+                        <field name="ka_qc" string="Name" required="1" options="{'no_open': True, 'no_create_edit': True, 'no_create': True}"/>
+                        <field name="date_hasil_qc" required="1" string="Tanggal"/>
+                </group>
+                <footer>
+                    <button name="write" type="object" string="Save" class="btn-primary"/>
+                    <button name="confirm" type="object" string="Confirm" class="btn-success"/>
+                    <button string="Cancel" class="btn-secondary" special="cancel" />
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="act_mrp_production_evaluasi" model="ir.actions.act_window">
+        <field name="name">Evaluasi</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">mrp.production.evaluasi</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">form</field>
+        <field name="context"/>
+        <field name="target">new</field>
+    </record>
+</odoo>

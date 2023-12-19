@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data noupdate="0">
+        <record id="action_account_move_information" model="ir.actions.act_window">
+            <field name="name">Account Information</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">account.move.information</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[]</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">
+					Click to add Account Information
+                </p>
+            </field>
+        </record>
+        <record id="view_account_move_information_form" model="ir.ui.view">
+            <field name="name">account.move.information.form</field>
+            <field name="model">account.move.information</field>
+            <field name="type">form</field>
+            <field name="priority" eval="8"/>
+            <field name="arch" type="xml">
+                <form string="Account Information">
+                    <sheet>
+                        <group>
+                            <field name="informasi"/>
+                            <field name="user_signature"/>
+                            <field name="footer1"/>
+                            <field name="footer2"/>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_account_move_information_tree" model="ir.ui.view">
+            <field name="name">account.move.information.tree</field>
+            <field name="model">account.move.information</field>
+            <field name="type">tree</field>
+            <field name="priority" eval="8"/>
+            <field name="arch" type="xml">
+                <tree string="Account Information">
+                    <field name="informasi"/>
+                    <field name="user_signature"/>
+                    <field name="footer1"/>
+                    <field name="footer2"/>
+                </tree>
+            </field>
+        </record>
+
+        <menuitem
+        id="menu_action_account_move_information" 
+        name="Account Informasi" 
+        parent="account.menu_finance_configuration" 
+        action="action_account_move_information" 
+        sequence="4"/>
+
+        
+    </data>
+</odoo>

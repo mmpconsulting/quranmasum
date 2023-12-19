@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="custom_web_assets" name="custom web assets" inherit_id="web.assets_common">
+        <xpath expr="." position="inside">
+            <link rel="stylesheet" type="text/scss" href="/cpk_cpb/static/src/scss/custom_pdf_report.scss"/>
+        </xpath>
+    </template>
+
+    <template id="custom_external_layout_background_pengolahan">
+        <div class="header" t-att-style="report_header_style">
+            <div class="o_background_header">
+                <div class="float-right">
+                    <h3 class="mt0 text-right" t-field="company.report_header"/>
+                </div>
+                <div class="row">
+                    <div class="col-3 border-right">
+                        <!-- <img t-if="company.logo" t-att-src="image_data_uri(company.logo)" class="float-left" alt="Logo"/> -->
+                        <div class="float-left">
+                            <div class="text-center">
+                                <strong t-field="company.partner_id.name"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-5 border-right">
+                        <div class="text-center">
+                            <strong>CATATAN PENGOLAHAN BETS</strong>
+                            <br/>
+                            (<strong t-field="document.product_id.name"/>)
+                            <br/>
+                            <strong t-field="document.name"/>
+                        </div>
+                    </div>
+                    <div class="col-4"> 
+                        <div class="text-center">
+                            Halaman:
+                            <span class="page"/>
+                            dari
+                            <span class="topage"/>
+                        </div>
+                        <hr/>
+                        <span>Prosedur diperiksa oleh : </span> <br/>
+                        <span>Ka.Produksi : </span><t t-esc="document.ka_produksi.name"/><br/>
+                        <span>Tanggal : </span><t t-esc="document.date_mo"/> 
+                    </div>
+                </div>
+                <hr/>
+                <span>Nama/Kode Produk : </span><t t-esc="document.product_id.name"/><br/>
+                <span>No Bets : </span><t t-esc="', '.join([move.lot_id.name for move in document.finished_move_line_ids if move.lot_id])"/>
+                <div class="clearfix mb8"/>
+            </div>
+        </div>
+
+        <div class="article o_report_layout_background" t-att-data-oe-model="o and o._name" t-att-data-oe-id="o and o.id" t-att-data-oe-lang="o and o.env.context.get('lang')">
+            <t t-call="web.address_layout"/>
+            <t t-raw="0"/>
+        </div>
+
+        <div class="footer o_background_footer">
+        </div>
+    </template>
+
+    <template id="custom_external_layout_background_pengemasan">
+        <div class="header" t-att-style="report_header_style">
+            <div class="o_background_header">
+                <div class="float-right">
+                    <h3 class="mt0 text-right" t-field="company.report_header"/>
+                </div>
+                <div class="row">
+                    <div class="col-3 border-right">
+                        <!-- <img t-if="company.logo" t-att-src="image_data_uri(company.logo)" class="float-left" alt="Logo"/> -->
+                        <div class="float-left">
+                            <div class="text-center">
+                                <strong t-field="company.partner_id.name"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-5 border-right">
+                        <div class="text-center">
+                            <span>PROSEDUR PENGEMASAN</span>
+                            <br/>
+                            (<strong t-field="document.product_id.name"/>)
+                            <br/>
+                            <strong t-field="document.name"/>
+                        </div>
+                    </div>
+                    <div class="col-4"> 
+                        <div class="text-center">
+                            Halaman:
+                            <span class="page"/>
+                            dari
+                            <span class="topage"/>
+                        </div>
+                        <hr/>
+                        <span>Prosedur diperiksa oleh : </span> <br/>
+                        <span>Ka.Produksi : </span><t t-esc="document.ka_produksi.name"/><br/>
+                        <span>Tanggal : </span><t t-esc="document.date_mo"/> 
+                    </div>
+                </div>
+                <hr/>
+                <span>Nama/Kode Produk : </span><t t-esc="document.product_id.name"/><br/>
+                <span>No Bets : </span><t t-esc="', '.join([move.lot_id.name for move in document.finished_move_line_ids if move.lot_id])"/>
+                <div class="clearfix mb8"/>
+            </div>
+        </div>
+
+        <div class="article o_report_layout_background" t-att-data-oe-model="o and o._name" t-att-data-oe-id="o and o.id" t-att-data-oe-lang="o and o.env.context.get('lang')">
+            <t t-call="web.address_layout"/>
+            <t t-raw="0"/>
+        </div>
+
+        <div class="footer o_background_footer">
+        </div>
+    </template>
+
+    <template id="custom_external_layout_pengolahan">
+        <t t-if="not o" t-set="o" t-value="doc"/>
+
+        <t t-if="not company">
+            <!-- Multicompany -->
+            <t t-if="company_id">
+                <t t-set="company" t-value="company_id"/>
+            </t>
+            <t t-elif="o and 'company_id' in o">
+                <t t-set="company" t-value="o.company_id.sudo()"/>
+            </t>
+            <t t-else="else">
+                <t t-set="company" t-value="res_company"/>
+            </t>
+            <t t-set="document" t-value="o"/>
+        </t>
+
+        <t t-set="document" t-value="o"/>
+
+        <t t-call="cpk_cpb.custom_external_layout_background_pengolahan"><t t-raw="0"/></t>
+    </template>
+
+    <template id="custom_external_layout_pengemasan">
+        <t t-if="not o" t-set="o" t-value="doc"/>
+
+        <t t-if="not company">
+            <!-- Multicompany -->
+            <t t-if="company_id">
+                <t t-set="company" t-value="company_id"/>
+            </t>
+            <t t-elif="o and 'company_id' in o">
+                <t t-set="company" t-value="o.company_id.sudo()"/>
+            </t>
+            <t t-else="else">
+                <t t-set="company" t-value="res_company"/>
+            </t>
+            <t t-set="document" t-value="o"/>
+        </t>
+
+        <t t-call="cpk_cpb.custom_external_layout_background_pengemasan"><t t-raw="0"/></t>
+
+    </template>
+
+</odoo>

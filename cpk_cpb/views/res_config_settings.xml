@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="res_config_settings_cpk_cpb_view_form" model="ir.ui.view">
+            <field name="name">res.config.settings.view.form.inherit.mrp</field>
+            <field name="model">res.config.settings</field>
+            <field name="priority" eval="35"/>
+            <field name="inherit_id" ref="mrp.res_config_settings_view_form" />
+            <field name="arch" type="xml">
+                <xpath expr="//div[contains(@id,'work_order')]" position="after">
+                    <div class="col-12 col-lg-12 o_setting_box" id="separator_cpk_cpb"/>
+                    <div class="col-12 col-lg-6 o_setting_box" id="bahan_awal_product_category">
+                        <div class="o_setting_left_pane"/>
+                        <div class="o_setting_right_pane">
+                            <span class="o_form_label">Categ Bahan Awal</span>
+                            <div class="text-muted">
+                                Pilih Product Category untuk Bahan Awal
+                            </div>
+                            <div class="text-muted">
+                                <field name="bahan_awal_categ_name" widget="many2many_tags"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-6 o_setting_box" id="bahan_pengemas_product_category">
+                        <div class="o_setting_left_pane"/>
+                        <div class="o_setting_right_pane">
+                            <span class="o_form_label">Categ Bahan Kemas</span>
+                            <div class="text-muted">
+                                Pilih Product Category untuk Bahan Kemas
+                            </div>
+                            <div class="text-muted">
+                                <field name="bahan_pengemas_categ_name" widget="many2many_tags"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-6 o_setting_box" id="bahan_kemas_sekunder_product_category">
+                        <div class="o_setting_left_pane"/>
+                        <div class="o_setting_right_pane">
+                            <span class="o_form_label">Categ Bahan Kemas Sekunder</span>
+                            <div class="text-muted">
+                                Pilih Product Category untuk Bahan Kemas Sekunder
+                            </div>
+                            <div class="text-muted">
+                                <field name="bahan_kemas_sekunder_categ_name" widget="many2many_tags"/>
+                            </div>
+                        </div>
+                    </div>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

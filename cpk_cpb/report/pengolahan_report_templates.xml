@@ -1,0 +1,514 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="custom_report_pengolahan_document">
+        <t t-call="cpk_cpb.custom_external_layout_pengolahan">
+            <t t-set="doc" t-value="doc.with_context(lang=doc.company_id.partner_id.lang)" />
+            <div class="page">
+                <div class="oe_structure"/>
+
+                <span>Ukuran bets : <t t-esc="doc.product_qty"/> <t t-esc="doc.product_uom_id.name"/></span><br/>
+                <span>Masa Edar : 2 Tahun</span>
+                <div class="row">
+                    <div class="col-3"/>
+                    <div class="col-6"/>
+                    <div class="col-3 float-right">
+                        <div class="text-left">
+                            <span>Mulai   : </span><t t-esc="doc.date_mulai"/><br/>
+                            <span>Selesai : </span><t t-esc="doc.date_selesai"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <p>Perhatian : Apabila terjadi penyimpangan terhadap prosedur dan ketetapan laporkan dan tangani sesuai Protap Penanganan Penyimpangan No: <strong><u><t t-esc="doc.protap_penyimpangan_id.name"/></u></strong></p>
+                    </div>
+                </div>
+                <hr/>
+                
+                <h6>
+                    <strong>A. KOMPOSISI</strong>
+                </h6>
+
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <!-- TODO: remove in master -->
+                            <t t-set="colspan" t-value="5"/>
+                            <th name="th_no" class="text-center" style="width: 5%">No</th>
+                            <th name="th_bahan_awal" class="text-center" style="width: 35%">Bahan Awal</th>
+                            <th name="th_bahan_dasar" class="text-center" style="width: 20%">Bahan Dasar</th>
+                            <th name="th_space" class="text-center" style="width: 20%"/>
+                            <th name="th_jumlah_perbets" class="text-center" style="width: 20%">Jumlah 1 Bets</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <t t-foreach="enumerate(doc.move_raw_bahan_awal_ids)" t-as="move_line">
+                            <tr t-att-class="''">
+                                <td name="td_no" class="text-center"><span t-esc="move_line[0]+1" /></td>
+                                <td name="td_bahan_awal" class="text-left"><i t-esc="move_line[1].product_id.name"></i></td>
+                                <td name="td_bahan_dasar" class="text-left"><span t-esc="(move_line[1].product_uom_qty/(doc.product_qty*doc.bom_id.jumlah_kapsul))"/>&#032;<span t-esc="move_line[1].product_uom.name"/></td>
+                                <td name="td_space"/>
+                                <td name="td_jumlah_perbets" class="text-left"><span t-esc="move_line[1].product_uom_qty"/>&#032;<span t-esc="move_line[1].product_uom.name"/></td>
+                            </tr>
+                        </t>
+                    </tbody>
+                </table>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <!-- TODO: remove in master -->
+                            <t t-set="colspan" t-value="5"/>
+                            <th name="th_no" class="text-center" style="width: 5%">No</th>
+                            <th name="th_bahan_awal" class="text-center" style="width: 35%">Bahan Pengemas Primer</th>
+                            <th name="th_space_1_1" class="text-center" style="width: 20%"/>
+                            <th name="th_space_1_2" class="text-center" style="width: 20%"/>
+                            <th name="th_jumlah_perbets" class="text-center" style="width: 20%">Jumlah 1 Bets</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <t t-foreach="enumerate(doc.move_raw_bahan_pengemas_ids)" t-as="move_line">
+                            <tr t-att-class="''">
+                                <td name="td_no" class="text-center"><span t-esc="move_line[0]+1" /></td>
+                                <td name="td_bahan_awal" class="text-left"><span t-esc="move_line[1].product_id.name"/></td>
+                                <td name="td_space_1_1"/>
+                                <td name="td_space_1_2"/>
+                                <td name="td_jumlah_perbets" class="text-left"><span>0</span>&#032;<span t-esc="move_line[1].product_uom.name"/></td>
+                            </tr>
+                        </t>
+                    </tbody>
+                </table>
+
+                <h6>
+                    <strong>B. ALAT</strong>
+                </h6>
+                <div class="row">
+                    <div class="col-12">
+                        <span>Peralatan yang digunakan dan Peralatan dibersihkan menurut Protap Pembersihan Mesin / alat :</span>
+                        <t t-foreach="doc.alat_ids" t-as="alat_id">
+                            <div class="row">
+                                <div class="col-12"><span><t t-esc="alat_id.sequence"/>. <t t-esc="alat_id.alat_id.name"/> (<t t-esc="alat_id.protap_id.name"/>)</span></div>
+                            </div>
+                        </t>
+                    </div>
+                </div>
+
+                <br/>
+                <h6>
+                    <strong>C. RUANG</strong>
+                </h6>
+                <div class="row">
+                    <div class="col-12">
+                        <span>Ruangan yang digunakan dan Ruangan dibersihkan menurut Protap Pembersihan Ruang :</span>
+                        <t t-foreach="doc.ruang_ids" t-as="ruang_id">
+                            <div class="row">
+                                <div class="col-12"><span><t t-esc="ruang_id.sequence"/>. <t t-esc="ruang_id.ruang_id.name"/> (<t t-esc="ruang_id.protap_id.name"/>)</span></div>
+                            </div>
+                        </t>
+                    </div>
+                </div>
+
+                <br/>
+                <div style="page-break-inside: avoid;">
+                    <h6>
+                        <strong>D. PENIMBANGAN</strong>
+                    </h6>
+                    <div class="row">
+                        <div class="col-12">
+                            <span>Ruangan yang digunakan dan Ruangan dibersihkan menurut Protap Pembersihan Ruang :</span>
+                        </div>
+                    </div>
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <!-- TODO: remove in master -->
+                                <t t-set="colspan" t-value="3"/>
+                                <th class="text-center" style="width: 70%">
+                                    <span>Alat timbang yang digunakan tipe </span><u><t t-esc="doc.penimbangan_id.alat_id.name"/></u><br/>
+                                    <span>Timbang bahan sesuai Protap Penimbangan No. </span><u><t t-esc="doc.alat_ids.filtered(lambda ai: ai.alat_id.id == doc.penimbangan_id.alat_id.id).protap_id.name"/></u>
+                                </th>
+                                <th class="text-center" style="width: 15%">
+                                    <span>Pelaksana</span><br/>
+                                    
+                                </th>
+                                <th class="text-center" style="width: 15%">
+                                    <span>Pemeriksa</span><br/>
+                                    
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr t-att-class="''">
+                                <td name="td_no" class="text-center">
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <!-- TODO: remove in master -->
+                                                <t t-set="colspan" t-value="4"/>
+                                                <th class="text-center" style="width: 40%">Nama Bahan</th>
+                                                <th class="text-center" style="width: 20%">Jumlah Teoritis</th>
+                                                <th class="text-center" style="width: 20%">Jumlah Nyata</th>
+                                                <th class="text-center" style="width: 20%">No. Bets/ No QC</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <t t-foreach="doc.penimbangan_id.move_raw_ids" t-as="move_line">
+                                                <tr t-att-class="''">
+                                                    <td class="text-left"><i><t t-esc="move_line.product_id.name"/></i></td>
+                                                    <td class="text-left"><span><t t-esc="move_line.jumlah_teoritis"/></span>&#032;<span t-esc="move_line.product_uom.name"/></td>
+                                                    <td class="text-left"><span><t t-esc="move_line.jumlah_nyata"/></span>&#032;<span t-esc="move_line.product_uom.name"/></td>
+                                                    <td class="text-left"><span><t t-esc="move_line.nomor_bets.name"/></span></td>
+                                                </tr>
+                                            </t>
+                                        </tbody>
+                                    </table>
+                                </td>
+                                <td class="text-center"><span><u><t t-esc="doc.penimbangan_id.pelaksana.name"/></u></span></td>
+                                <td class="text-center"><span><u><t t-esc="doc.penimbangan_id.pemeriksa.name"/></u></span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <hr/>
+
+                <h6>
+                    <strong>E. PENCAMPURAN</strong>
+                </h6>
+                <div class="row">
+                    <div class="col-12">
+                        <span>Tanggal Pencampuran : <t t-esc="doc.pencampuran_id.date"/></span>
+                    </div>
+                </div>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <!-- TODO: remove in master -->
+                            <th class="text-center" style="width: 70%">Langkah-langkah</th>
+                            <th class="text-center" style="width: 15%">Pelaksana</th>
+                            <th class="text-center" style="width: 15%">Pemeriksa</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <t t-foreach="doc.pencampuran_id.step_pencampuran_ids" t-as="step">
+                            <tr t-att-class="''">
+                                <td class="text-left" >
+                                    <p t-esc="step.step"/>
+                                </td>
+                                <td class="text-center"><p t-esc="step.pelaksana.name"/></td>
+                                <td class="text-center"><p t-esc="step.pemeriksa.name"/></td>
+                            </tr>
+                        </t>
+                    </tbody>
+                </table>
+
+                <hr/>
+
+                <h6>
+                    <strong>F. FILLING KAPSUL</strong>
+                </h6>
+                <div class="row">
+                    <div class="col-12">
+                        <span>Tanggal pengisian kapsul : <t t-esc="doc.filling_kapsul_id.date"/></span>
+                    </div>
+                </div>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <!-- TODO: remove in master -->
+                            <th class="text-center" style="width: 70%">Detil</th>
+                            <th class="text-center" style="width: 15%">Pelaksana</th>
+                            <th class="text-center" style="width: 15%">Pemeriksa</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr t-att-class="''">
+                            <td class="text-left" >
+                                <ul>
+                                    <li>Sebelumnya digunakan untuk produk: <t t-esc="doc.filling_kapsul_id.product_id.name"/> No.Bets: <t t-esc="doc.filling_kapsul_id.nomor_bets.name"/></li>
+                                    <t t-foreach="doc.filling_kapsul_id.step_filling_kapsul_ids" t-as="step">
+                                        <li t-esc="step.step"/>
+                                    </t>
+                                    <li>Jumlah Kapsul: <t t-esc="doc.filling_kapsul_id.jumlah_kapsul"/></li>
+                                </ul>
+                            </td>
+                            <td class="text-center"><p t-esc="doc.filling_kapsul_id.pelaksana.name"/></td>
+                            <td class="text-center"><p t-esc="doc.filling_kapsul_id.pemeriksa.name"/></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <hr/>
+
+                <h6>
+                    <strong>G. FILLING PRIMER</strong>
+                </h6>
+                <div class="row">
+                    <div class="col-12">
+                        <span>Tanggal Filling : <t t-esc="doc.filling_kapsul_id.date"/></span>
+                    </div>
+                </div>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <!-- TODO: remove in master -->
+                            <th class="text-center" style="width: 60%">Detil</th>
+                            <th class="text-center" style="width: 20%">Pelaksana</th>
+                            <th class="text-center" style="width: 20%">Pemeriksa</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr t-att-class="''">
+                            <td class="text-left" style="width: 70%">
+                                <ul>
+                                    <li>Sebelumnya digunakan untuk produk: <t t-esc="doc.filling_primer_id.product_id.name"/> No.Bets: <t t-esc="doc.filling_primer_id.nomor_bets.name"/></li>
+                                    <t t-foreach="doc.filling_primer_id.step_filling_primer_ids" t-as="step">
+                                        <li t-esc="step.step"/>
+                                    </t>
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <span>1. Rekonsialisasi bahan pengemas</span>
+                                        </div>
+                                    </div>
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th class="text-center" rowspan="2" style="width: 30%">Nama Bahan Pengemas</th>
+                                                <th class="text-center" rowspan="2" style="width: 20%">Kebutuhan teoritis per-bets</th>
+                                                <th class="text-center" colspan="4" style="width: 50%">Rekonsiliasi</th>
+                                            </tr>
+                                            <tr>
+                                                <th class="text-center" style="width: 25%">diterima</th>
+                                                <th class="text-center" style="width: 25%">dipakai</th>
+                                                <th class="text-center" style="width: 25%">rusak</th>
+                                                <th class="text-center" style="width: 25%">dikembalikan</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <t t-foreach="doc.filling_primer_id.rekonsiliasi_move_ids" t-as="move">
+                                                <tr t-att-class="''">
+                                                    <td class="text-left"><span t-esc="move.product_id.name"/></td>
+                                                    <td class="text-left"><span t-esc="move.jumlah_teoritis"/></td>
+                                                    <td class="text-left"><span t-esc="move.diterima"/></td>
+                                                    <td class="text-left"><span t-esc="move.dipakai"/></td>
+                                                    <td class="text-left"><span t-esc="move.rusak"/></td>
+                                                    <td class="text-left"><span t-esc="move.dikembalikan"/></td>
+                                                </tr>
+                                            </t>
+                                        </tbody>
+                                    </table>
+
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <span>2. Rekonsialisasi hasil pembotolan </span> 
+                                            [<strong>
+                                                <t t-if="doc.filling_primer_id.status_rekonsiliasi_pembotolan == '0'">
+                                                    TIDAK OK
+                                                </t>
+                                                <t t-if="doc.filling_primer_id.status_rekonsiliasi_pembotolan == '1'">
+                                                    OK
+                                                </t>
+                                            </strong>]
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <span>Hasil (a)</span>
+                                        </div>
+                                        <div class="col-6">
+                                            <span>: </span><t t-esc="doc.filling_primer_id.hasil"/>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <span>Nyata (b)</span>
+                                        </div>
+                                        <div class="col-6">
+                                            <span>: </span><t t-esc="doc.filling_primer_id.nyata"/>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <span>Sampel QC (c)</span>
+                                        </div>
+                                        <div class="col-6">
+                                            <span>: </span><t t-esc="doc.filling_primer_id.sampel_qc"/>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <span>Rusak (d)</span>
+                                        </div>
+                                        <div class="col-6">
+                                            <span>: </span><t t-esc="doc.filling_primer_id.rusak"/>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <span>Rekonsiliasi</span>
+                                        </div>
+                                        <div class="col-6">
+                                            <span>: </span><t t-esc="doc.filling_primer_id.rekonsiliasi_pembotolan"/>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <span>batas hasil</span>
+                                        </div>
+                                        <div class="col-6">
+                                            <span>: </span><t t-esc="doc.filling_primer_id.batas_hasil_min"/>% - <t t-esc="doc.filling_primer_id.batas_hasil_max"/>%
+                                        </div>
+                                    </div>
+                                </ul>
+                            </td>
+                            <td class="text-center"><p t-esc="doc.filling_primer_id.pelaksana.name"/></td>
+                            <td class="text-center"><p t-esc="doc.filling_primer_id.pemeriksa.name"/></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <hr/>
+
+                <div style="page-break-inside: avoid;">
+                    <h6>
+                        <strong>H. DEVIASI</strong>
+                    </h6>
+                    <div class="row">
+                        <div class="col-12">
+                            <span>Deviasi Max 10%</span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <span>Hasil Teoritis</span>
+                        </div>
+                        <div class="col-6">
+                            <span>: </span><t t-esc="doc.filling_primer_id.deviasi_hasil_teoritis"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <span>Hasil Nyata</span>
+                        </div>
+                        <div class="col-6">
+                            <span>: </span><t t-esc="doc.filling_primer_id.deviasi_hasil_nyata"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <span>Keterangan</span>
+                        </div>
+                        <div class="col-6">
+                            <span>: </span>
+                            <strong>
+                                <t t-if="doc.filling_primer_id.deviasi_keterangan == '0'">
+                                    TIDAK OK
+                                </t>
+                                <t t-if="doc.filling_primer_id.deviasi_keterangan == '1'">
+                                    OK
+                                </t>
+                            </strong>
+                        </div>
+                    </div>
+                </div>
+
+                <hr/>
+
+                <div style="page-break-inside: avoid;">
+                    <h6>
+                        <strong>I. EVALUASI</strong>
+                    </h6>
+                    <div class="row">
+                        <div class="col-12">
+                            <span>Telah diperiksa oleh Kepala Bagian Produksi :</span>
+                        </div>
+                    </div>
+                    <br/>
+                    <div class="row">
+                        <div class="col-4">
+                            <span>Nama</span>
+                        </div>
+                        <div class="col-6">
+                            <span>: </span><t t-esc="doc.evaluasi_pengolahan_id.ka_produksi.name"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-4">
+                            <span>Tanggal</span>
+                        </div>
+                        <div class="col-6">
+                            <span>: </span><t t-esc="doc.evaluasi_pengolahan_id.date_hasil_produksi"/>
+                        </div>
+                    </div>
+                    <br/><br/>
+                    <div class="row">
+                        <div class="col-12">
+                            <span>Dikaji oleh Kepala Bagian Pemastian Mutu :</span>
+                        </div>
+                    </div>
+                    <br/>
+                    <div class="row">
+                        <div class="col-4">
+                            <span>Nama</span>
+                        </div>
+                        <div class="col-6">
+                            <span>: </span><t t-esc="doc.evaluasi_pengolahan_id.ka_qc.name"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-4">
+                            <span>Tanggal</span>
+                        </div>
+                        <div class="col-6">
+                            <span>: </span><t t-esc="doc.evaluasi_pengolahan_id.date_hasil_qc"/>
+                        </div>
+                    </div>
+
+                    <hr/>
+
+                    <br/><br/>
+                    <div class="row">
+                        <div class="col-4 border-right">
+                            <div class="float-left">
+                                <div class="text-left">
+                                    <span>Disusun oleh</span><br/><span>Kepala Produksi</span>
+                                    <br/><br/><br/>
+                                    <span>Tanggal</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-4 border-right">
+                            <div class="float-left">
+                                <div class="text-left">
+                                    <span>Diperiksa oleh</span><br/><span>QC</span>
+                                    <br/><br/><br/>
+                                    <span>Tanggal</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-4"> 
+                            <div class="float-left">
+                                <div class="text-left">
+                                    <span>Disetujui oleh</span><br/><span>Kabag Pemastian Mutu</span>
+                                    <br/><br/><br/>
+                                    <span>Tanggal</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="oe_structure"/>
+            </div>
+        </t>
+    </template>
+
+
+    <template id="custom_report_pengolahan">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="cpk_cpb.custom_report_pengolahan_document" t-lang="doc.company_id.partner_id.lang"/>
+            </t>
+        </t>
+    </template>
+
+</odoo>

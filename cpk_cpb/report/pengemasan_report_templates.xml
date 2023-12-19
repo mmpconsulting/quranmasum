@@ -1,0 +1,340 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="custom_report_pengemasan_document">
+        <t t-call="cpk_cpb.custom_external_layout_pengemasan">
+            <t t-set="doc" t-value="doc.with_context(lang=doc.company_id.partner_id.lang)" />
+            <div class="page">
+                <div class="oe_structure"/>
+
+                <span>Ukuran bets : <t t-esc="doc.product_qty"/> <t t-esc="doc.product_uom_id.name"/></span><br/>
+                <span>Masa Edar : 2 Tahun</span>
+                <div class="row">
+                    <div class="col-3"/>
+                    <div class="col-6"/>
+                    <div class="col-3 float-right">
+                        <div class="text-left">
+                            <span>Mulai   : </span><t t-esc="doc.date_mulai"/><br/>
+                            <span>Selesai : </span><t t-esc="doc.date_selesai"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <p>Perhatian : Apabila terjadi penyimpangan terhadap prosedur dan ketetapan laporkan dan tangani sesuai Protap Penanganan Penyimpangan No <strong><u><t t-esc="doc.protap_penyimpangan_id.name"/></u></strong></p>
+                    </div>
+                </div>
+                <hr/>
+
+                <h6>
+                    <strong>A. PROSEDUR</strong>
+                </h6>
+                <table>
+                    <t t-foreach="doc.product_id.pengemasan_ids" t-as="pengemasan_id">
+                        <tr>
+                            <td name="td_no" class="text-center" style="width: 5%">
+                                <span t-esc="pengemasan_id.sequence"/>.
+                            </td>
+                            <td>
+                                <t t-if="isinstance(pengemasan_id.step, str)">
+                                    <t t-set="string_to_output" t-value="pengemasan_id.step.split('\n')" />
+                                    <t t-foreach="string_to_output" t-as="string_line">
+                                        <span t-esc="string_line"/>
+                                        <br />
+                                    </t>
+                                </t>
+                            </td>
+                        </tr>
+                    </t>
+                </table>
+                
+                <br/>
+
+                <h6>
+                    <strong>B. BAHAN KEMAS</strong>
+                </h6>
+
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <!-- TODO: remove in master -->
+                            <t t-set="colspan" t-value="5"/>
+                            <th name="th_bahan_kemas" class="text-center" style="width: 40%">Bahan Pengemas</th>
+                            <th name="th_teo_bets" class="text-center" style="width: 30%">Kebutuhan teoritis per bets</th>
+                            <!-- <th name="th_teo_order" class="text-center" style="width: 20%">Kebutuhan teoritis per order</th> -->
+                            <th name="th_nyata" class="text-center" style="width: 30%">Nyata</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <t t-foreach="doc.rekonsiliasi_id.rekonsiliasi_bahan_kemas_ids" t-as="kemas_id">
+                            <tr t-att-class="''">
+                                <td name="td_bahan_kemas" class="text-left"><span t-esc="kemas_id.product_id.name"/></td>
+                                <td name="td_teo_bets" class="text-left"><span t-esc="kemas_id.jumlah_teoritis_per_bets"/>&#032;<span t-esc="kemas_id.product_uom.name"/></td>
+                                <!-- <td name="td_teo_order"><span t-esc="kemas_id.jumlah_teoritis_per_order"/>&#032;<span t-esc="kemas_id.product_uom.name"/></td> -->
+                                <td name="td_nyata" class="text-left"><span t-esc="kemas_id.jumlah_teoritis_per_bets"/>&#032;<span t-esc="kemas_id.product_uom.name"/></td>
+                            </tr>
+                        </t>
+                    </tbody>
+                </table>
+
+                <h6>
+                    <strong>C. PENGAWASAN SELAMA PROSES</strong>
+                </h6>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <t t-set="colspan" t-value="3"/>
+                            <th name="th_no" class="text-center" style="width: 5%">No</th>
+                            <th name="th_parameter" class="text-center" style="width: 50%">Parameter</th>
+                            <th name="th_keterangan" class="text-center" style="width: 45%">Keterangan</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <t t-foreach="doc.pengawasan_id.step_pengawasan_ids" t-as="pengawasan_id">
+                            <tr t-att-class="''">
+                                <td name="td_no" class="text-center"><span t-esc="pengawasan_id.sequence"/></td>
+                                <td name="td_parameter" class="text-left"><span t-esc="pengawasan_id.step"/></td>
+                                <td name="td_keterangan" class="text-left"><span t-esc="pengawasan_id.keterangan"/></td>
+                            </tr>
+                        </t>
+                    </tbody>
+                </table>
+
+                <h6>
+                    <strong>D. REKONSILIASI</strong>
+                </h6>
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <t t-set="colspan" t-value="3"/>
+                            <th class="text-center" style="width: 70%"/>
+                            <th class="text-center" style="width: 15%">
+                                <span>Pelaksana</span><br/>
+                            </th>
+                            <th class="text-center" style="width: 15%">
+                                <span>Pemeriksa</span><br/>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr t-att-class="''">
+                            <td name="td_no" class="text-left">
+                                <span>1. Rekonsiliasi Bahan Kemas</span><br/>
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <!-- TODO: remove in master -->
+                                            <t t-set="colspan" t-value="4"/>
+                                            <th class="text-center" rowspan="2" style="width: 50%">Nama Bahan</th>
+                                            <th class="text-center" rowspan="2" style="width: 10%">Kebutuhan teoritis per bets</th>
+                                            <!-- <th class="text-center" rowspan="2" style="width: 5%">Kebutuhan teoritis per order</th> -->
+                                            <th class="text-center" colspan="5" style="width: 40%">Rekonsiliasi</th>
+                                        </tr>
+                                        <tr>
+                                            <th class="text-center" style="width: 25%">diterima</th>
+                                            <th class="text-center" style="width: 25%">dipakai</th>
+                                            <th class="text-center" style="width: 25%">rusak</th>
+                                            <th class="text-center" style="width: 25%">dikembalikan</th>
+                                            <!-- <th class="text-center" style="width: 20%">dihancurkan</th> -->
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <t t-foreach="doc.rekonsiliasi_id.rekonsiliasi_bahan_kemas_ids" t-as="kemas_id">
+                                            <tr t-att-class="''">
+                                                <td class="text-left"><span t-esc="kemas_id.product_id.name"/></td>
+                                                <td class="text-left"><span t-esc="kemas_id.jumlah_teoritis_per_bets"/>&#032;<span t-esc="kemas_id.product_uom.name"/></td>
+                                                <!-- <td class="text-left"><span t-esc="kemas_id.jumlah_teoritis_per_order"/>&#032;<span t-esc="kemas_id.product_uom.name"/></td> -->
+                                                <td class="text-left"><span t-esc="kemas_id.diterima"/></td>
+                                                <td class="text-left"><span t-esc="kemas_id.dipakai"/></td>
+                                                <td class="text-left"><span t-esc="kemas_id.rusak"/></td>
+                                                <td class="text-left"><span t-esc="kemas_id.dikembalikan"/></td>
+                                                <!-- <td class="text-left"><span t-esc="kemas_id.dihancurkan"/></td> -->
+                                            </tr>
+                                        </t>
+                                    </tbody>
+                                </table>
+
+                                <span>2. Rekonsiliasi Produk Jadi</span><br/>
+                                <table class="table table-bordered">
+                                    <t t-set="bj_rowspan" t-value="len(doc.rekonsiliasi_id.box_penuh_ids)+1"/>
+                                    <thead>
+                                        <tr>
+                                            <th class="text-center" style="width: 60%">Bentuk</th>
+                                            <th class="text-center" colspan="2" style="width: 40%">Hasil Pengemasan</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <t t-foreach="enumerate(doc.rekonsiliasi_id.box_penuh_ids)" t-as="box_penuh_id">
+                                            <tr t-att-class="''">
+                                                <t t-if="box_penuh_id[0] == 0">
+                                                    <td class="text-left" t-att-rowspan="bj_rowspan"><span>Box terisi penuh</span></td>
+                                                </t>
+                                                <td class="text-left"><span t-esc="box_penuh_id[1].date"/></td>
+                                                <td class="text-left"><span t-esc="int(box_penuh_id[1].quantity)"/></td>
+                                            </tr>
+                                        </t>
+                                        <tr t-att-class="''">
+                                            <td class="text-left"><strong><span>Total </span><t t-esc="int(sum(bp.quantity for bp in doc.rekonsiliasi_id.box_penuh_ids if bp))"/><span> Box</span></strong></td>
+                                            <td class="text-left"><strong><span t-esc="int(sum(bp.quantity for bp in doc.rekonsiliasi_id.box_penuh_ids if bp) * doc.rekonsiliasi_id.jumlah_botol)"/> Botol</strong></td>
+                                        </tr>
+                                        <tr t-att-class="''">
+                                            <td class="text-left"><span>Tidak penuh 1 box</span></td>
+                                            <td class="text-left" colspan="2"><span t-esc="doc.rekonsiliasi_id.box_tidak_penuh"/></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                                <div class="row">
+                                    <div class="col-6">
+                                        <span>a) Total hasil pengemasan</span>
+                                    </div>
+                                    <div class="col-6">
+                                        <span>: </span><t t-esc="doc.rekonsiliasi_id.total_hasil_pengemasan"/>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <span>b) Total hasil produk jadi</span>
+                                    </div>
+                                    <div class="col-6">
+                                        <span>: </span><t t-esc="doc.rekonsiliasi_id.total_hasil_produk_jadi"/>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <span>Persentase hasil</span>
+                                    </div>
+                                    <div class="col-6">
+                                        <span>: </span><t t-esc="doc.rekonsiliasi_id.persentase_hasil"/>&#032;%
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <span>Batas hasil</span>
+                                    </div>
+                                    <div class="col-6">
+                                        <span>: </span><t t-esc="doc.rekonsiliasi_id.batas_hasil_min"/>% - <t t-esc="doc.rekonsiliasi_id.batas_hasil_max"/>%
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <span>Status</span>
+                                    </div>
+                                    <div class="col-6">
+                                        <span>: </span>[<strong>
+                                            <t t-if="doc.rekonsiliasi_id.status == 'not_ok'">
+                                                TIDAK OK
+                                            </t>
+                                            <t t-if="doc.rekonsiliasi_id.status == 'ok'">
+                                                OK
+                                            </t>
+                                        </strong>]
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="text-center"><span><u><t t-esc="doc.rekonsiliasi_id.pelaksana.name"/></u></span></td>
+                            <td class="text-center"><span><u><t t-esc="doc.rekonsiliasi_id.pemeriksa.name"/></u></span></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <br/>
+
+                <div style="page-break-inside: avoid;">
+                    <h6>
+                        <strong>E. EVALUASI</strong>
+                    </h6>
+                    <div class="row">
+                        <div class="col-12">
+                            <span>Telah diperiksa oleh Kepala Bagian Produksi :</span>
+                        </div>
+                    </div>
+                    <br/>
+                    <div class="row">
+                        <div class="col-4">
+                            <span>Nama</span>
+                        </div>
+                        <div class="col-6">
+                            <span>: </span><t t-esc="doc.evaluasi_pengemasan_id.ka_produksi.name"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-4">
+                            <span>Tanggal</span>
+                        </div>
+                        <div class="col-6">
+                            <span>: </span><t t-esc="doc.evaluasi_pengemasan_id.date_hasil_produksi"/>
+                        </div>
+                    </div>
+                    <br/><br/>
+                    <div class="row">
+                        <div class="col-12">
+                            <span>Dikaji oleh Kepala Bagian Pemastian Mutu :</span>
+                        </div>
+                    </div>
+                    <br/>
+                    <div class="row">
+                        <div class="col-4">
+                            <span>Nama</span>
+                        </div>
+                        <div class="col-6">
+                            <span>: </span><t t-esc="doc.evaluasi_pengemasan_id.ka_qc.name"/>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-4">
+                            <span>Tanggal</span>
+                        </div>
+                        <div class="col-6">
+                            <span>: </span><t t-esc="doc.evaluasi_pengemasan_id.date_hasil_qc"/>
+                        </div>
+                    </div>
+
+                    <hr/>
+
+                    <br/><br/>
+                    <div class="row">
+                        <div class="col-4 border-right">
+                            <div class="float-left">
+                                <div class="text-left">
+                                    <span>Disusun oleh</span><br/><span>Kepala Produksi</span>
+                                    <br/><br/><br/>
+                                    <span>Tanggal</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-4 border-right">
+                            <div class="float-left">
+                                <div class="text-left">
+                                    <span>Diperiksa oleh</span><br/><span>QC</span>
+                                    <br/><br/><br/>
+                                    <span>Tanggal</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-4"> 
+                            <div class="float-left">
+                                <div class="text-left">
+                                    <span>Disetujui oleh</span><br/><span>Kabag Pemastian Mutu</span>
+                                    <br/><br/><br/>
+                                    <span>Tanggal</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="oe_structure"/>
+            </div>
+        </t>
+    </template>
+
+
+    <template id="custom_report_pengemasan">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="cpk_cpb.custom_report_pengemasan_document" t-lang="doc.company_id.partner_id.lang"/>
+            </t>
+        </t>
+    </template>
+
+</odoo>

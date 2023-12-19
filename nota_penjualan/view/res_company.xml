@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="pembelian_view_company_form">
+            <field name="name">pembelian.view.commpany.form</field>
+            <field name="model">res.company</field>
+            <field name="inherit_id" ref="base.view_company_form"/>
+            <field name="priority">20</field>
+            <field name="arch" type="xml">
+                <xpath expr="//notebook" position="inside">
+                    <page string="Report Options">
+                        <group>
+                            <group string="Invoice">
+                                <field name="line_per_page"/>
+                                <field name="footer_note" widget="html" />
+                            </group>
+                            <group></group>
+                        </group>
+                    </page>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

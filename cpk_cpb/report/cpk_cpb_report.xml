@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Pengolahan -->
+        <report 
+            id="action_custom_report_pengolahan"
+            string="Laporan Pengolahan Bets"
+            model="mrp.production" 
+            report_type="qweb-pdf"
+            file="cpk_cpb.custom_report_pengolahan" 
+            name="cpk_cpb.custom_report_pengolahan"
+            print_report_name="'Laporan Pengolahan Bets - %s' % (object.name)"
+            menu="False"
+        />
+
+        <!-- Pengemasan -->
+        <report 
+            id="action_custom_report_pengemasan"
+            string="Laporan Pengemasan"
+            model="mrp.production" 
+            report_type="qweb-pdf"
+            file="cpk_cpb.custom_report_pengemasan" 
+            name="cpk_cpb.custom_report_pengemasan"
+            print_report_name="'Laporan Pengemasan - %s' % (object.name)"
+            menu="False"
+        />
+    </data>
+</odoo>

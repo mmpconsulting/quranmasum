@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="bp_hr_allowance_hr_contract_view_form">
+            <field name="name">bp.hr.allowance.contract.view.form</field>
+            <field name="model">hr.contract</field>
+            <field name="inherit_id" ref="hr_contract.hr_contract_view_form"/>
+            <field name="priority">20</field>
+            <field name="arch" type="xml">
+                <xpath expr="//group[@name='salary_and_advantages']" position="after">
+                    <group string="Allowances">
+                        <field name="allowance_ids" nolabel="1">
+                            <tree editable="bottom">
+                                <field name="allowance_id"/>
+                                <field name="code"/>
+                                <field name="amount" sum="Total" />
+                            </tree>
+                        </field>
+                    </group>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

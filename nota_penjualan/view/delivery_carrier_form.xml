@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record model="ir.ui.view" id="manual_delviery_carrier_form">
+            <field name="name">manual.delivery.carrier.form</field>
+            <field name="model">delivery.carrier</field>
+            <field name="inherit_id" ref="delivery.view_delivery_carrier_form"/>
+            <field name="priority">20</field>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='integration_level']" position="before">
+                    <field name="is_manual_input"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

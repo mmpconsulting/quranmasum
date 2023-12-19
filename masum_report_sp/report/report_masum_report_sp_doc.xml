@@ -1,0 +1,273 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+    <template id="bens_basic_layout" name="BENS Basic Layout">
+        <html t-att-lang="lang and lang.replace('_', '-')" t-att-data-report-margin-top="data_report_margin_top" t-att-data-report-header-spacing="data_report_header_spacing" t-att-data-report-dpi="data_report_dpi" t-att-data-report-landscape="data_report_landscape" t-att-web-base-url="web_base_url">
+            <head>
+                <meta charset="utf-8"/>
+                <meta name="viewport" content="initial-scale=1"/>
+                <title>
+                    <t t-esc="title or 'Odoo Report'"/>
+                </title>
+            </head>
+            <body >
+                <main>
+                    <t t-raw="0"/>
+                </main>
+            </body>
+        </html>
+    </template>
+    
+    <template id="masum_style_report">
+        <t t-call="masum_report_sp.bens_basic_layout">
+            <t t-call="masum_report_sp.bootstrap_3_style">
+                <style>
+                    .address{
+                        font-size:10pt;
+                    }
+
+                    .table-bordered td,.table-bordered th{
+                        border:1px solid black!important
+                    }
+
+                    tr.product_row {
+                        font-size:10pt;
+                    }
+
+                    .tdd {
+                        border-top:thin solid black;
+                        width:50%;
+                        margin-left:25%;
+                        margin-right:25%;
+                    }
+
+                    table.table-borderless td, table.table-borderless th{
+                        border: none !important;
+                    }
+                </style>
+                <t t-raw="0" />
+            </t>
+        </t>
+    </template>
+        <template id="report_masum_report_sp_doc">
+            <t t-if="o and 'company_id' in o">
+                <t t-set="company" t-value="o.company_id"></t>
+            </t>
+            <t t-if="not o or not 'company_id' in o">
+                <t t-set="company" t-value="res_company"></t>
+            </t>
+            <div class="page">
+            <t t-call="masum_report_sp.masum_style_report">
+                <t t-foreach="docs" t-as="doc">
+                    <style>
+                        .address{
+                            font-size:12px;
+                        }
+
+                        .table-bordered td,.table-bordered th{
+                            border:1px solid black!important
+                        }
+
+                        tr.product_row {
+                            font-size:12pt;
+                        }
+
+                        .tdd {
+                            border-top:thin solid black;
+                            width:50%;
+                            margin-left:25%;
+                            margin-right:25%;
+                        }
+
+                        table.table-borderless td, table.table-borderless th{
+                            border: none !important;
+                        }
+
+                        .table-report-identity tbody tr td {
+                            margin:0;
+                            padding:0;
+                        }
+                    </style>
+
+                    <t t-if="doc.picking_type_id.code == 'outgoing'">
+                        <t t-set="o" t-value="doc.with_context(lang=doc.partner_id.lang)" />
+                        <t t-set="partner" t-value="doc.partner_id or (doc.move_lines and doc.move_lines[0].partner_id) or False"/>
+                        <t t-if="partner" name="partner_header">
+                            <t t-set="address">
+                                <div t-esc="partner" t-options='{"widget": "contact", "fields": ["address", "name", "phone"], "no_marker": True}'/>
+                            </t>
+                        </t>
+
+                        <table class="table table-condensed table-condensed table-borderless">
+                            <tbody>
+                                <tr style="border-bottom:2px solid black !important;">
+                                    <td class="text-center" style="vertical-align:middle;">
+                                        <img t-att-src="image_data_uri(user.company_id.logo)" style="max-width:80%;" />
+                                    </td>
+                                    <td >
+                                        <h3 style="text-transform:uppercase;margin:0;" t-esc="user.company_id.name" />
+                                        <span class="address" t-if="user.company_id.street2 or user.company_id.street2" style="display:block;">
+                                            <span t-if="user.company_id.street" t-esc="user.company_id.street" />
+                                            <span t-if="user.company_id.street2">, </span>
+                                            <span t-if="user.company_id.street2" t-esc="user.company_id.street2" />
+                                        </span>
+                                        <span class="address" t-if="user.company_id.city or user.company_id.state_id or user.company_id.zip" style="display:block;">
+                                            <span t-if="user.company_id.city" t-esc="user.company_id.city" />
+                                            <span t-if="user.company_id.state_id">, </span>
+                                            <span t-if="user.company_id.state_id" t-esc="user.company_id.state_id.name" />
+                                            <span t-if="user.company_id.zip">, </span>
+                                            <span t-if="user.company_id.zip" t-esc="user.company_id.zip" />
+                                        </span>
+                                        <span class="address" t-if="user.company_id.country_id" style="display:block;">
+                                            <span t-if="user.company_id.country_id" t-esc="user.company_id.country_id.name" />
+                                        </span>
+                                        <span class="address" t-if="user.company_id.phone" style="display:block;">
+                                            <span t-if="user.company_id.phone">Phone : </span>
+                                            <span t-if="user.company_id.phone" t-esc="user.company_id.phone" />
+                                        </span>
+                                        
+                                    </td>
+                                    <td class="text-right">
+                                        <div>
+                                            <span>Kepada Yth.</span>
+                                        </div>
+                                        <div>
+                                            <b t-field="doc.partner_id.name" />
+                                        </div>
+                                        <div>
+                                            <span t-field="doc.partner_id.street" />
+                                            <span t-field="doc.partner_id.street2" />
+                                        </div>
+                                        <div>
+                                            <span t-if="doc.partner_id.phone" t-field="doc.partner_id.phone" />
+                                            <span t-if="doc.partner_id.mobile and doc.partner_id.phone">/</span>
+                                            <span t-if="doc.partner_id.mobile" t-field="doc.partner_id.mobile" />
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <!-- Is there a discount on at least one line? -->
+                    <div class="row">
+                            <div class="col-12 text-center">
+                                <h3 style="margin-bottom:12px;">SURAT JALAN</h3>
+                            </div>
+                        </div>
+                        
+                    <table class="table table-condensed table-borderless table-report-identity">
+                            <tbody>
+                                <tr class="product_row">
+                                    <td class="col-xs-2">
+                                        <b>NOMOR</b>
+                                    </td>
+                                    <td style="width:20px;">:</td>
+                                    <td >
+                                        <span t-field="doc.name" />
+                                    </td>
+                                     
+                                    <td class="col-xs-2">
+                                        <b>TANGGAL</b>
+                                    </td>
+                                    <td style="width:20px;">:</td>
+                                    <td>
+                                        <t t-if="doc.state == 'done'">
+                                            <span t-field="doc.date_done"/>
+                                        </t>
+                                        <t t-if="doc.state != 'done'">
+                                            <span t-field="doc.scheduled_date"/>
+                                        </t>
+
+                                    </td>
+                                </tr>
+                                <tr class="product_row">
+                                    <td>
+                                        <b>NOMOR SO</b>
+                                    </td>
+                                    <td >:</td>
+                                    <td >
+                                        <span t-field="doc.origin" />
+                                    </td>
+                                    <td></td>
+                                    <td ></td>
+                                    <td></td>
+                                </tr>
+                                
+                            </tbody>
+                        </table>
+
+                        <!-- TABLE CONTENT -->
+                        <table class="table table-bordered table-condensed">
+                            <tr class="product_row">
+                                <td >
+                                    <b>NO</b>
+                                </td>
+                                <td >
+                                    <b>NAMA</b>
+                                </td>
+                                <td class="text-right">
+                                    <b>JUMLAH</b>
+                                </td>
+                            </tr>
+
+                            <t t-set="lines" t-value="doc.move_lines.filtered(lambda x: x.product_uom_qty)"/>
+                            <t t-set="rowidx" t-value="1" />
+
+                            <tr class="product_row" t-foreach="lines" t-as="move">
+                                <td >
+                                    <!-- <span t-field="move.product_id.default_code" /> -->
+                                    <span t-esc="rowidx" />
+
+                                </td>
+                                <td >
+                                    <span t-field="move.product_id"/>
+                                    
+                                </td>
+                                <td class="text-right">
+                                    <span t-field="move.product_uom_qty" t-options='{"widget": "float", "precision": 0}' />
+                                    <!-- <span t-field="move.product_uom"/> -->
+                                </td>
+                                <t t-set="rowidx" t-value="rowidx + 1" />
+                            </tr>
+
+                        </table>
+                        
+                    <table>
+                        <tr style="text-align:center;height:100px;">
+                            <td style="width:600px">Pengirim</td>
+                            <td style="width:600px">Penerima</td>
+                        </tr>
+                        <tr class="text-center">
+                            <td style="width:600px">
+                                (                            
+                                <span>                       </span>
+                                )
+                            </td>
+                            <td style="width:600px">
+                                (
+                                <span>                       </span>
+                                )
+                            </td>
+                        </tr>
+                    </table>
+
+                    <div class="row" style="font-size:10pt;margin-top:5mm;">
+                            <div class="col-xs-12">
+                                <i>
+                                    <span>Dicetak : <t t-esc="context_timestamp(datetime.datetime.now()).strftime('%d-%m-%Y %H:%M')"/>
+                                    </span>
+                                    <span> / </span>
+                                    <span>oleh :  <t t-esc="user.name" />
+                                    </span>
+                                </i>
+                            </div>
+                    </div>
+                    </t>
+                </t>
+                </t>
+            </div>
+            
+        </template>
+        
+    </data>
+</odoo>
